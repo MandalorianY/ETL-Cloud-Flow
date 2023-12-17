@@ -3,10 +3,10 @@ import google.cloud.bigquery as bigquery
 
 
 @functions_framework.cloud_event
-def upload_csv_to_bigquery(cloud_event):
+def upload_parquet_to_bigquery(cloud_event):
     """
     This function is triggered by a Cloud Storage event, when a new parquet file is uploaded to a GCS bucket.
-    The function extracts the GCS bucket name, folder name, and file name from thmessage data,
+    The function extracts the GCS bucket name, folder name, and file name from the message data,
     and then uploads the file to a BigQuery dataset.
     """
 
@@ -23,12 +23,12 @@ def upload_csv_to_bigquery(cloud_event):
         client = bigquery.Client()
         job_config = bigquery.LoadJobConfig()
         job_config.autodetect = True
-        job_config.source_format = bigquery.SourceFormat.CSV
+        job_config.source_format = bigquery.SourceFormat.PARQUET  
 
         # Get the dataset name from the bucket name.
         dataset_name = "nodale.crime_dataset"
 
-        # Create a BigQuery table from the csv file.
+        # Create a BigQuery table from the parquet file.
         table_id = f"{dataset_name}.{folder_name}"
         client.load_table_from_uri(
             f"gs://{bucket_name}/{folder_name}/{file_name}",

@@ -1,17 +1,16 @@
 Architecture_1/auth
 Architecture_1/.terraform
-
 Architecture_1/.terraform.lock.hcl
-
 Architecture_1/terraform.tfstate
-Architecture_1/tmp/*
+Architecture_1/tmp/function_dataflow/*
+Architecture_1/tmp/function_upload_to_bigquery/*
+Architecture_1/terraform.tfstate.backup
 
-
-
-
-Architecture_2
 Architecture_2/auth
 Architecture_2/.terraform
 Architecture_2/.terraform.lock.hcl
 Architecture_2/terraform.tfstate
+Architecture_2/tmp/start_architecture_2_function/*
+Architecture_2/main.tf
+Architecture_2/terraform.tfstate.backup
 

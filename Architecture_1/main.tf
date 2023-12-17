@@ -69,7 +69,7 @@ module "upload_to_bigquery_function" {
   project_id             = var.project_id
   region                 = var.region
   google_pubsub_topic_id = module.pubsub_start.google_pubsub_topic_id
-  entry_point            = "upload_csv_to_bigquery"
+  entry_point            = "upload_parquet_to_bigquery"
   trigger_type           = "storage"
   trigger_bucket         = module.storage_crime_processed.bucket_name
 }
