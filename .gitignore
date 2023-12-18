@@ -6,6 +6,7 @@ Architecture_1/tmp/function_dataflow/*
 Architecture_1/tmp/function_upload_to_bigquery/*
 Architecture_1/terraform.tfstate.backup
 
+
 Architecture_2/auth
 Architecture_2/.terraform
 Architecture_2/.terraform.lock.hcl

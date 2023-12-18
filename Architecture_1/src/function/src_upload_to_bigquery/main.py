@@ -23,7 +23,7 @@ def upload_parquet_to_bigquery(cloud_event):
         client = bigquery.Client()
         job_config = bigquery.LoadJobConfig()
         job_config.autodetect = True
-        job_config.source_format = bigquery.SourceFormat.PARQUET  
+        job_config.source_format = bigquery.SourceFormat.PARQUET
 
         # Get the dataset name from the bucket name.
         dataset_name = "nodale.crime_dataset"

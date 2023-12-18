@@ -9,6 +9,14 @@ spark.conf.set("spark.sql.legacy.timeParserPolicy", "LEGACY")
 
 
 def top_10_theft_crimes_location_past_3y(df: DataFrame) -> DataFrame:
+    """
+    Take as an input a full dataframe and return a dataframe with the top 10 theft crimes location
+    for the past 3 years
+    Args:
+        df (DataFrame): The Dataframe to be processed
+    Returns:
+        df (DataFrame): the Dataframe with the top 10 theft crimes location for the past 3 years
+    """
     current_year = datetime.datetime.now().year
     df.createOrReplaceTempView("crimes")
 
@@ -23,6 +31,14 @@ def top_10_theft_crimes_location_past_3y(df: DataFrame) -> DataFrame:
 
 
 def total_crimes_past_5y_per_month(df: DataFrame) -> DataFrame:
+    """"
+    Take as an input a full dataframe and return a dataframe with the total crimes per month
+    for the past 5 years
+    Args:
+        df (DataFrame): The Dataframe to be processed
+    Returns:
+        df (DataFrame): the Dataframe with the total crimes per month
+    """
     current_year = datetime.datetime.now().year
     df.createOrReplaceTempView("crimes")
 
@@ -38,6 +54,13 @@ def total_crimes_past_5y_per_month(df: DataFrame) -> DataFrame:
 
 
 def total_crimes_per_year(df: DataFrame) -> DataFrame:
+    """
+    Take as an input a full dataframe and return a dataframe with the total crimes per year
+    Args:
+        df (DataFrame): The Dataframe to be processed
+    Returns:
+        df (DataFrame): the Dataframe with the total crimes per year
+    """
     df.createOrReplaceTempView("crime_data")
 
     return spark.sql("""
@@ -50,6 +73,15 @@ def total_crimes_per_year(df: DataFrame) -> DataFrame:
 
 
 def types_of_crimes_most_arrested_2016_to_2019(df: DataFrame) -> DataFrame:
+    """
+    Take as an input a full dataframe and return a dataframe with the types of crimes most arrested
+    from 2016 to 2019
+    Args:
+        df (DataFrame): The Dataframe to be processed
+    Returns:
+        df (DataFrame): the Dataframe with the types of crimes most arrested from 2016 to 2019
+    """
+
     df.createOrReplaceTempView("crime_data")
 
     return spark.sql("""
@@ -63,6 +95,13 @@ def types_of_crimes_most_arrested_2016_to_2019(df: DataFrame) -> DataFrame:
 
 
 def safest_locations_10pm_to_4am(df: DataFrame) -> DataFrame:
+    """
+    Take as an input a full dataframe and return a dataframe with the safest locations from 10pm to 4am
+    Args:
+        df (DataFrame): The Dataframe to be processed
+    Returns:
+        df (DataFrame): the Dataframe with the safest locations from 10pm to 4am
+        """
     df.createOrReplaceTempView("crime_data")
 
     return spark.sql("""SELECT
@@ -77,6 +116,13 @@ def safest_locations_10pm_to_4am(df: DataFrame) -> DataFrame:
 
 
 def load_df_to_gcs_parquet(df: DataFrame, bucket: str, name: str) -> None:
+    """
+    Load the dataframe to gcs (cloud storage) in parquet format
+    Args:
+        df (DataFrame): The Dataframe to be uploaded
+        bucket (str): The bucket name that the dataframe will be uploaded to
+        name (str): The name of the folder that will be created in the cloud storage
+    """
     print(
         f"Uploading csv result of '{name}' processing into gs://{bucket}/{name}'.")
     output_gcs_path = f'gs://{bucket}/{name}'
@@ -85,11 +131,23 @@ def load_df_to_gcs_parquet(df: DataFrame, bucket: str, name: str) -> None:
 
 
 def add_3y(df: DataFrame) -> DataFrame:
+    """
+    Add 3 years to the date column it use regex to extract the date convert it to timestamp
+    and add 3 years to it,
+
+    Args:
+        df (DataFrame): The Dataframe to be processed
+
+    Returns:
+        DataFrame: The processed dataframe with the date column in timestamp format with 3 years added
+    """
     date_pattern = "^(\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2})"
-    df = df.withColumn("Date", to_timestamp(regexp_extract("Date", date_pattern, 1), "dd/MM/yyyy HH:mm"))
+    df = df.withColumn("Date", to_timestamp(
+        regexp_extract("Date", date_pattern, 1), "dd/MM/yyyy HH:mm"))
     df = df.withColumn("Year", col("Year").cast("int") + 3)
     df = df.withColumn("Date", expr("date + interval 3 years"))
     return df
+
 
 def main():
     bucket_name = "crime_processed_data"
@@ -105,10 +163,7 @@ def main():
     ]
     for func in function_list:
         # Execute the function and get the result
-        result_df = func(df)
-
-        file_name = str(func.__name__)
-        load_df_to_gcs_parquet(result_df, bucket_name, file_name)
+        load_df_to_gcs_parquet(func(df), bucket_name, func.__name__)
 
 
 if __name__ == "__main__":
