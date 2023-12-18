@@ -36,7 +36,7 @@ resource "google_dataproc_workflow_template" "template" {
     }
   }
   jobs {
-    step_id = "process-crime-data"
+    step_id = "process-crime-data-arhitecture-2"
     pyspark_job {
       main_python_file_uri = var.main_python_file_uri
       properties = {

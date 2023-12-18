@@ -14,6 +14,7 @@ def load_dataframe_to_bigquery(df: DataFrame, table_name: str) -> None:
     Args:
         df (DataFrame): The dataframe to be loaded
         table_name (str): The name of the table that will be created or overwritten in BigQuery
+        like {project_id}.{dataset_name}.{table_name}"
     """
     print(f"Uploading '{table_name}' table to BigQuery.")
     df.write.format('bigquery').option(
