@@ -11,6 +11,7 @@ Une cloud function va se lancer et instancier un dataproc workflow template avec
 Ce job va traiter les données avec pyspark et les envoyer dans un cloud storage sous la forme de cinq fichiers parquets.
 
 Une cloud function avec un event sur le cloud storage (si un objet est écrit ou réécrit) va se lancer et envoyer les données dans Bigquery
+Comme c'est une cloud function, elle va prendre un certains temps a se lancer et a s'arrêter, il faut donc attendre un peu avant de voir les données dans Bigquery.
 Chaque fichier parquet va être envoyer dans une table bigquery différente sous **crime_dataset**
 
 > [!success] Résultat architecture 1

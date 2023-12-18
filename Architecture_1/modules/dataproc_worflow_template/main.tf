@@ -28,6 +28,9 @@ resource "google_dataproc_workflow_template" "template" {
         }
         software_config {
           image_version = "2.0.35-debian10"
+          properties = {
+            "spark:spark.jars.packages" = "com.google.cloud.spark:spark-bigquery-with-dependencies_2.12:0.22.0"
+          }
         }
       }
     }

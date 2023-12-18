@@ -66,7 +66,7 @@ module "upload_to_bigquery_function" {
   source                 = "./modules/cloud_function"
   output_dir             = "./tmp/function_upload_to_bigquery/function.zip"
   source_dir             = "./src/function/src_upload_to_bigquery"
-  project_id             = v.project_id
+  project_id             = var.project_id
   region                 = var.region
   google_pubsub_topic_id = module.pubsub_start.google_pubsub_topic_id
   entry_point            = "upload_parquet_to_bigquery"

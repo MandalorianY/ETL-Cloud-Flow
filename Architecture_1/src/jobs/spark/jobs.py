@@ -1,7 +1,6 @@
-from pyspark.sql.functions import regexp_extract, to_timestamp
+from pyspark.sql.functions import to_timestamp, expr, col
 from pyspark.sql import SparkSession
 from pyspark.sql.dataframe import DataFrame
-from pyspark.sql.functions import expr, col
 import datetime
 
 spark = SparkSession.builder.getOrCreate()
@@ -141,9 +140,7 @@ def add_3y(df: DataFrame) -> DataFrame:
     Returns:
         DataFrame: The processed dataframe with the date column in timestamp format with 3 years added
     """
-    date_pattern = "^(\\d{2}/\\d{2}/\\d{4} \\d{2}:\\d{2})"
-    df = df.withColumn("Date", to_timestamp(
-        regexp_extract("Date", date_pattern, 1), "dd/MM/yyyy HH:mm"))
+    df = df.withColumn("Date", to_timestamp("Date", "MM/dd/yyyy hh:mm:ss a"))
     df = df.withColumn("Year", col("Year").cast("int") + 3)
     df = df.withColumn("Date", expr("date + interval 3 years"))
     return df
